@@ -1,9 +1,8 @@
-#Key Word: Explicit
+# Key Word: Explicit
 
 在 C++ 裡會有一些隱式轉換，增加方便性
 
 ```cpp
-
 class MyInt {
 public:
     MyInt(int a) {
@@ -28,7 +27,6 @@ int main() {
 
 
 ```cpp
-
 class MyInt {
 public:
     explicit MyInt(int a) {
