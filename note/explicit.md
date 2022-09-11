@@ -1,4 +1,4 @@
-# Keyword: Explicit
+# Explicit
 
 在 C++ 裡會有一些隱式轉換，增加方便性
 

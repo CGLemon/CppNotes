@@ -4,7 +4,7 @@
 
 C++ 函數模板有自動推論的能力，如果同一個函數有多個 overload ，它可以根據類別決定使用那一個。
 
-```cpp=
+```cpp
 #include <iostream>
 
 template<typename T>
@@ -27,9 +27,9 @@ int main(int argc, char **argv) {
 }
 ```
 
-我們也可以使用 [Forwarding References](https://en.cppreference.com/w/cpp/language/reference#Forwarding_references) 方法，將多個函數合併成一個函數，Forwarding References 是一種特殊的值分類方式，在 cv-unqualified 的函數模板右值中，可以根據傳遞參數的左右值傳決定類別。
+我們也可以使用 [Forwarding References](https://en.cppreference.com/w/cpp/language/reference#Forwarding_references) 方法，將多個函數合併成一個函數，Forwarding References 是一種特殊的值分類方式，在 cv-unqualified 的函數模板右值引用中，可以根據傳遞參數的左右值引用決定類別。
 
-```cpp=
+```cpp
 #include <iostream>
 
 template<typename T>
@@ -47,9 +47,9 @@ int main(int argc, char **argv) {
 
 ## Perfect Forwarding
 
-一般的 Forwarding 有一個問題，編譯器會因為效率，自行決定使用那一個函數或模板的型態，例如下方，宣告了一個右值 ```a``` ，但卻是通過左值傳送給函數。間單來講，一般的 Forwarding 可能會有非預期型態轉換。
+一般的 Forwarding 有一個問題，因為右值引用本身是左值，所以通過 function 會優先使用左值引用，例如下方，宣告了一個右值引用 ```a``` ，但卻是通過左值傳送給函數。間單來講，一般的 Forwarding 可能會使用非預期型態。
 
-```cpp=
+```cpp
 #include <iostream>
 
 template<typename T>
@@ -65,7 +65,7 @@ void func(T& a) {
 int main(int argc, char **argv) {
 
     int &&a = 0;
-    func(a); // passed by lval
+    func(a); // 使用左值引用
 
     return 0;
 }
@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
 
 Perfect Forwarding 可以避免這個問題，使用函數 ```std::forward<T>(T arg)``` ，可以看到呼叫預期的函數。
 
-```cpp=
+```cpp
 #include <iostream>
 #include <utility>
 
@@ -98,7 +98,7 @@ int main(int argc, char **argv) {
 
 Perfect Forwarding 最大作用就是和 Forwarding References 一起使用，如果不使用 Perfect Forwarding，那麼 ```wrapper``` 無論如何都會呼叫 ```func(T& a)``` ，但使用後，它可以呼叫預期的函數。
 
-```cpp=
+```cpp
 #include <iostream>
 #include <utility>
 
